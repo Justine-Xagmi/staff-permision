@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HOC Dashboard - Permission System</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link rel="manifest" href="/manifest.json"/>
+  <meta name="theme-color" content="#2563eb"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="apple-mobile-web-app-title" content="PermissionApp"/>
+  <link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">🏫 Permission System</div>
+    <div class="nav-user">
+      <span id="navUserName"></span>
+      <span class="role-badge hoc-badge">Head of College</span>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="dashboard-container">
+    <div class="dashboard-header">
+      <h2>Permission Requests — Final Approval</h2>
+      <p class="subtitle">Review permissions approved by Head of Department</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num" id="statTotal">0</div><div class="stat-label">HOD Approved</div></div>
+      <div class="stat-card pending"><div class="stat-num" id="statPending">0</div><div class="stat-label">Awaiting Your Review</div></div>
+      <div class="stat-card approved"><div class="stat-num" id="statApproved">0</div><div class="stat-label">Finally Approved</div></div>
+      <div class="stat-card rejected"><div class="stat-num" id="statRejected">0</div><div class="stat-label">Rejected by You</div></div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <label>Filter:</label>
+      <select id="filterStatus" onchange="loadPermissions()">
+        <option value="">All</option>
+        <option value="pending">Pending HOC Review</option>
+        <option value="approved">Finally Approved</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </div>
+
+    <div id="permissionsList" class="permissions-list">
+      <div class="loading">Loading requests...</div>
+    </div>
+  </div>
+
+  <!-- Review Modal -->
+  <div id="reviewModal" class="modal hidden">
+    <div class="modal-overlay" onclick="closeModal()"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Final Review — Head of College</h3>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div id="reviewDetail"></div>
+      <div id="reviewFormSection">
+        <div class="form-group">
+          <label>Comment (optional)</label>
+          <textarea id="reviewComment" rows="3" placeholder="Add a comment..."></textarea>
+        </div>
+        <div id="reviewError" class="error-msg hidden"></div>
+        <div class="modal-actions">
+          <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn-danger" onclick="submitReview('rejected')">Reject</button>
+          <button class="btn-success" onclick="submitReview('approved')">Finally Approve</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PWA Install Banner -->
+  <div id="installBanner" class="install-banner hidden">
+    <div class="install-banner-text">
+      <span class="icon">🏫</span>
+      <div>
+        <strong>Install Permission App</strong>
+        <span>Add to your home screen for quick access</span>
+      </div>
+    </div>
+    <div class="install-banner-actions">
+      <button class="btn-dismiss" onclick="document.getElementById('installBanner').classList.add('hidden')">Not now</button>
+      <button class="btn-install" onclick="installApp()">📲 Install</button>
+    </div>
+  </div>
+  <script src="../js/api.js"></script>
+  <script src="../js/hoc.js"></script>
+</body>
+</html>
